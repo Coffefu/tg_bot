@@ -1,5 +1,8 @@
+import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pydantic import ValidationError
+
+from SendingOrderBot import SendingOrderBot
 from order import Order
 import subprocess
 
@@ -11,28 +14,24 @@ class MyHandler(BaseHTTPRequestHandler):
             order = Order.parse_raw(self.rfile.read(content_len))
             order.order_number = gen_order_number()
         except ValidationError as e:
-            pass  # send bad response
+            self.send_response(400)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'success': False, 'msg': str(e)}).encode())
         else:
             call_bot(order)
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
-            # self.wfile.write(json.dumps({'status': True}).encode())
+            self.wfile.write(json.dumps({'success': True}).encode())
         return
 
 
-# todo fix it
-def call_bot(order: Order):
-    args = f'--coffee_house_id="{data["coffee_house_id"]}" '
-    args += f'--order_content="{data["order_content"]}" '
-    args += f'--time="{data["time"]}" '
-    args += f'--order_number={data["order_number"]} '
-    if 'mail' in data:
-        args += f'--mail="{data["mail"]}" '
-    if 'phone_number' in data:
-        args += f'--phone_number="{data["phone_number"]}" '
-
-    subprocess.Popen(f'python bot_waiter.py ' + args)
+def call_bot(order: Order) -> None:
+    # subprocess.Popen(f"python test.py --order='{order.json(exclude_none=True)}'")  thinkit
+    # thinkit сдалать это на потоках
+    bot = SendingOrderBot(order)
+    bot.send_message()
 
 
 def gen_order_number() -> int:
