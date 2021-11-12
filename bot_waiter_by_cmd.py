@@ -28,7 +28,3 @@ with open('baristas.txt', 'r') as file:
 if args.coffee_house_id in baristas:
     for i in baristas[args.coffee_house_id]:
         bot.send_message(chat_id=i, text=message, parse_mode='HTML')
-
-
-class SendingOrderBot:
-    pass
