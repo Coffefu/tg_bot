@@ -1,4 +1,5 @@
 /.idea
 /venv/
+/ubuntu_venv/
 .env
 baristas.txt
