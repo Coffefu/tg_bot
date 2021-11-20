@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, timedelta
+from pytz import timezone
 from pydantic import BaseModel, validator, constr, EmailStr
 
 
@@ -19,10 +20,11 @@ class Order(BaseModel):
         min_time = timedelta(minutes=15)
         max_time = timedelta(hours=5)
         now = datetime.now()
+
         assert now < future and min_time <= future - now <= max_time, \
             "Incorrect order time. The allowed time is from 15 minutes to 5 hours"
-        return future
 
+        return future.astimezone(timezone('Asia/Vladivostok'))
 
 # input_json = """{
 #     "coffee_house_id": "1234",
