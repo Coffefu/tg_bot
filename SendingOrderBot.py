@@ -15,7 +15,7 @@ class SendingOrderBot:
     def __str__(self):
         message = f'<b>Заказ №{self.order.order_number}</b>\n'
         message += f'<i>Содержание:</i> {self.order.order_content}\n'
-        message += f'<i>Приготовить к:</i> {str(self.order.time.time())[:5]}\n'  # fixme
+        message += f'<i>Приготовить к:</i> {self.order.time.strftime("%H:%M")}\n'
         if self.order.phone_number:
             message += f'<i>Телефон покупателя:</i> +7{self.order.phone_number}\n'
         if self.order.email:
