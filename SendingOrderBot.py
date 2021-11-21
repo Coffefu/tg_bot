@@ -28,5 +28,6 @@ class SendingOrderBot:
             baristas = json.loads(file.read())
 
         if self.order.coffee_house_id in baristas:
-            for i in baristas[self.order.coffee_house_id]:
-                self.bot.send_message(chat_id=i, text=str(self), parse_mode='HTML')
+            self.bot.send_message(chat_id=baristas[self.order.coffee_house_id], text=str(self), parse_mode='HTML')
+            # for i in baristas[self.order.coffee_house_id]:
+            #     self.bot.send_message(chat_id=i, text=str(self), parse_mode='HTML')
