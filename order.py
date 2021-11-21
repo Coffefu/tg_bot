@@ -17,14 +17,16 @@ class Order(BaseModel):
 
     @validator('time')
     def time_validator(cls, future: datetime):
+        future = timezone('Asia/Vladivostok').localize(future)
+
+        now = datetime.now(tz=timezone('Asia/Vladivostok'))
         min_time = timedelta(minutes=15)
         max_time = timedelta(hours=5)
-        now = datetime.utcnow()
 
         assert now < future and min_time <= future - now <= max_time, \
             "Incorrect order time. The allowed time is from 15 minutes to 5 hours"
 
-        return future.astimezone(timezone('Asia/Vladivostok'))
+        return future
 
 # input_json = """{
 #     "coffee_house_id": "1234",
