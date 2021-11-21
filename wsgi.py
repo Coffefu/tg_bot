@@ -46,6 +46,7 @@ def do_post(request_data: str) -> tuple:
 
     return response_headers, status, response_data
 
+
 # todo change this
 def gen_order_number() -> int:
     global count_orders
