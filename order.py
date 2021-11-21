@@ -19,7 +19,7 @@ class Order(BaseModel):
     def time_validator(cls, future: datetime):
         min_time = timedelta(minutes=15)
         max_time = timedelta(hours=5)
-        now = datetime.now()
+        now = datetime.utcnow()
 
         assert now < future and min_time <= future - now <= max_time, \
             "Incorrect order time. The allowed time is from 15 minutes to 5 hours"
